@@ -1,0 +1,27 @@
+{
+  "name": "express-typescript-boilerplate",
+  "version": "1.0.0",
+  "description": "Basic boilerplate project that I use as a starting point for new Express projects on TypeScript. Use and abuse according to your own good pleasure ;-)",
+  "main": "app.js",
+  "dependencies": {
+    "@types/express": "^4.0.39",
+    "@types/node": "^8.0.47",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "compression": "^1.7.1",
+    "cors": "^2.8.4",
+    "express": "^4.15.4"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.3.0",
+    "source-map-loader": "^0.2.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./built/app.js",
+    "compile": "tsc",
+    "dev": "nodemon -e ts --exec \"npm run compile\""
+  },
+  "author": "Rory Gaddin",
+  "license": "ISC"
+}
