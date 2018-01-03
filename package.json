@@ -19,7 +19,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./built/app.js",
-    "compile": "tsc",
+    "compile": "tsc && cpx \"src/config/config.json\" \"built/config\" && mkdirp sslcert",
     "dev": "nodemon -e ts --exec \"npm run compile\""
   },
   "author": "Rory Gaddin",

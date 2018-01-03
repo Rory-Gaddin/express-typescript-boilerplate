@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug .TS",
+            "program": "${workspaceRoot}/src/app.ts",            
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "console": "internalConsole",
+            "cwd": "${workspaceRoot}",
+            "outDir": "${workspaceFolder}/built"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach",
+            "port": 5858,
+            "outFiles": [
+                
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Compiled .JS",
+            "program": "${workspaceRoot}/built/app.js",
+            "stopOnEntry": false,
+            "console": "internalConsole",
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}

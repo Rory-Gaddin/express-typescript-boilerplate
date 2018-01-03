@@ -9,13 +9,16 @@ import { sendResponse } from './lib/helperFunctions';
 import { LoggingService, ErrorSeverity } from './lib/logging-service';
 import { ConfigurationManager } from './config/config';
 import { HttpsAgentFactory } from './lib/httpsAgentFactory';
+import { ControllerFactory } from './controllers/controllerFactory';
 import fs = require('fs');
 
 export interface AppRouteController {
     addRoutes: (app: Application) => void;
 }
 
-initializeApp();
+// It all starts here!
+ControllerFactory.initialize()
+.then(_ => initializeApp());
 
 // -------------------------------------------------------------------------------------------------------------------------------
 
@@ -25,6 +28,7 @@ function initializeApp() {
 
     try {
         addApplicationMiddleware(app);
+        initializeRouteControllers(app);
         startApp(app);
     } catch (e) {
         LoggingService.Logger.logError(e, ErrorSeverity.Crash);
@@ -61,7 +65,7 @@ function addApplicationMiddleware(
 
     // Add an APIResponseHandler instance to all request objects so that route controllers
     // can make use of them without needing to explicitly instantiate them for each route
-    app.use('/api', addResponseHandler)
+    app.    use('/api', addResponseHandler)
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------
@@ -70,14 +74,20 @@ export interface ResponseWithHandler extends Response {
     handler: APIResponseHandler;
 }
 
-export interface RequestWithAuthInfo extends Request {
-    userGuid: string;
-    userInfo: { fullName: string, userId: string }
-}
-
 function addResponseHandler(req, res, next) {
     res.handler = new APIResponseHandler(res)
     next();
+}
+
+// ------------------------------------------------------------------------------------------------------------------------------
+
+function initializeRouteControllers(app: Application): void {
+    const controllers: AppRouteController[] = ControllerFactory.controllers;
+    
+    // Add the auth provider to each RouteController in turn
+    controllers.forEach(controller => {
+        controller.addRoutes(app);
+    });
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------
@@ -93,8 +103,7 @@ function startApp(app: Application) {
 
     const port = ConfigurationManager.config.APP_PORT || 3000;
     
-    server.listen(port);
-    LoggingService.Logger.logMessage("I'm listening...");
+    server.listen(port, () => LoggingService.Logger.logMessage("I'm listening..."));
 
     var env = process.env.NODE_ENV || "DEBUG";
 

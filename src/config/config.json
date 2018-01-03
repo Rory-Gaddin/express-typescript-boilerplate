@@ -1,5 +1,5 @@
 {
-    "appPort": 80,
+    "appPort": 3000,
     "compressionThreshold": 1024,
     "loggerType": "console",
     "fullStackTraceOnError": true
